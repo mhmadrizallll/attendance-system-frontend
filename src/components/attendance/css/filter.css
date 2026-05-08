@@ -1,0 +1,226 @@
+/* =========================
+   FILTER CARD
+========================= */
+
+.filter-card {
+  background: #fff;
+
+  padding: 24px;
+
+  border-radius: 22px;
+
+  border: 1px solid #edf2f7;
+
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.05);
+
+  margin-bottom: 24px;
+}
+
+.filter-title {
+  font-size: 22px;
+  font-weight: 700;
+
+  color: #0f172a;
+
+  margin-bottom: 22px;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.filter-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 20px;
+
+  width: 100%;
+}
+
+/* =========================
+   GROUP
+========================= */
+
+.filter-group {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+.filter-group label {
+  font-size: 13px;
+  font-weight: 700;
+
+  color: #475569;
+}
+
+/* =========================
+   INPUT / SELECT
+========================= */
+
+.filter-group select,
+.modern-date-input {
+  width: 100%;
+
+  height: 52px;
+
+  padding: 0 16px;
+
+  border: 1px solid #dbe4ee;
+
+  border-radius: 16px;
+
+  background: #f8fafc;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  color: #0f172a;
+
+  box-sizing: border-box;
+
+  transition: all 0.2s ease;
+}
+
+.filter-group select:hover,
+.modern-date-input:hover {
+  border-color: #94a3b8;
+}
+
+.filter-group select:focus,
+.modern-date-input:focus {
+  outline: none;
+
+  background: #fff;
+
+  border-color: #2563eb;
+
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+/* =========================
+   DATEPICKER FIX
+========================= */
+
+.react-datepicker-wrapper {
+  width: 100% !important;
+
+  display: block !important;
+}
+
+.react-datepicker__input-container {
+  width: 100% !important;
+
+  display: block !important;
+}
+
+.react-datepicker__input-container input {
+  width: 100% !important;
+}
+
+/* =========================
+   POPUP
+========================= */
+
+.react-datepicker {
+  border: none !important;
+
+  overflow: hidden;
+
+  border-radius: 18px !important;
+
+  box-shadow: 0 14px 45px rgba(15, 23, 42, 0.15) !important;
+
+  font-family: inherit !important;
+}
+
+.react-datepicker__header {
+  background: #2563eb !important;
+
+  border-bottom: none !important;
+
+  padding: 16px !important;
+}
+
+.react-datepicker__current-month {
+  color: white !important;
+
+  font-size: 15px !important;
+
+  font-weight: 700 !important;
+}
+
+.react-datepicker__day-name {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.react-datepicker__day {
+  width: 36px !important;
+
+  line-height: 36px !important;
+
+  border-radius: 10px;
+
+  transition: 0.2s;
+}
+
+.react-datepicker__day:hover {
+  background: #dbeafe !important;
+
+  color: #2563eb !important;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background: #2563eb !important;
+
+  color: white !important;
+}
+
+.react-datepicker__navigation-icon::before {
+  border-color: white !important;
+}
+
+/* =========================
+   WARNING
+========================= */
+
+.filter-warning {
+  margin-top: 18px;
+
+  padding: 12px 14px;
+
+  border-radius: 14px;
+
+  background: #fef3c7;
+
+  color: #92400e;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 992px) {
+  .filter-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-card {
+    padding: 18px;
+  }
+}
