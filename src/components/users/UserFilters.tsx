@@ -1,5 +1,3 @@
-// src/components/users/UserFilters.tsx
-
 type Props = {
   search: string;
   department: string;
@@ -17,12 +15,11 @@ export default function UserFilters({
 }: Props) {
   return (
     <div className="filter-card">
+      {/* HEADER */}
       <div className="filter-header">
-        <h2 className="filter-title">Data Users</h2>
+        <h2 className="filter-title">Users</h2>
 
-        {/* SHOW INACTIVE */}
         <button
-          type="button"
           className={`inactive-toggle ${showDeleted ? "active" : ""}`}
           onClick={() =>
             onChange({
@@ -32,19 +29,19 @@ export default function UserFilters({
         >
           <div className="toggle-circle" />
 
-          <span>{showDeleted ? "Showing Inactive" : "Active Users"}</span>
+          <span>{showDeleted ? "Inactive Mode" : "Active Only"}</span>
         </button>
       </div>
 
+      {/* FILTER GRID */}
       <div className="filter-grid">
         {/* SEARCH */}
-        <div className="filter-group">
+        <div className="filter-group small">
           <label>Search</label>
 
           <input
-            type="text"
-            placeholder="Search name / NIK"
             value={search}
+            placeholder="Name / NIK"
             onChange={(e) =>
               onChange({
                 search: e.target.value,
@@ -54,7 +51,7 @@ export default function UserFilters({
         </div>
 
         {/* DEPARTMENT */}
-        <div className="filter-group">
+        <div className="filter-group small">
           <label>Department</label>
 
           <select
@@ -65,13 +62,20 @@ export default function UserFilters({
               })
             }
           >
-            <option value="">All Department</option>
+            <option value="">All</option>
 
-            {departments.map((d) => (
-              <option key={d.department} value={d.department}>
-                {d.department}
-              </option>
-            ))}
+            {[...departments]
+              // FILTER NULL / EMPTY
+              .filter((d) => d?.department && d.department.trim() !== "")
+              // SORT A-Z
+              .sort((a, b) =>
+                (a.department || "").localeCompare(b.department || ""),
+              )
+              .map((d) => (
+                <option key={d.department} value={d.department}>
+                  {d.department}
+                </option>
+              ))}
           </select>
         </div>
       </div>

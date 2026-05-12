@@ -1,19 +1,30 @@
-import { useMemo, useState } from "react";
+"use client";
+
+import { useMemo } from "react";
 
 import { Attendance } from "@/hooks/useAttendance";
 
-export default function AttendanceTable({ data }: { data: Attendance[] }) {
-  // 🔥 FILTER STATE
-  const [selectedType, setSelectedType] = useState("ALL");
+type Props = {
+  data: Attendance[];
+  selectedType: string;
+  setSelectedType: (type: string) => void;
+};
 
-  // 🔥 DETECT IN / OUT
+export default function AttendanceTable({
+  data,
+  selectedType,
+  setSelectedType,
+}: Props) {
+  // =====================
+  // DETECT IN / OUT
+  // =====================
   const getAttendanceType = (deviceId: number, time: string) => {
-    // ✅ DEVICE SERVER SELALU IN
-    if (deviceId === 1) {
-      return "IN";
+    // DEVICE SERVER
+    if (Number(deviceId) === 1) {
+      return "ENTER";
     }
 
-    // ✅ DEVICE LAIN PAKAI JAM
+    // JAM PULANG
     if (time >= "15:00:00") {
       return "OUT";
     }
@@ -21,16 +32,24 @@ export default function AttendanceTable({ data }: { data: Attendance[] }) {
     return "IN";
   };
 
-  // 🔥 BADGE STYLE
+  // =====================
+  // BADGE STYLE
+  // =====================
   const getBadgeClass = (type: string) => {
     if (type === "IN") {
       return "badge-in";
     }
 
+    if (type === "ENTER") {
+      return "badge-enter";
+    }
+
     return "badge-out";
   };
 
-  // 🔥 FILTER DATA
+  // =====================
+  // FILTER DATA
+  // =====================
   const filteredData = useMemo(() => {
     if (selectedType === "ALL") {
       return data;
@@ -81,6 +100,17 @@ export default function AttendanceTable({ data }: { data: Attendance[] }) {
           >
             OUT
           </button>
+
+          <button
+            className={
+              selectedType === "ENTER"
+                ? "filter-btn active-enter"
+                : "filter-btn"
+            }
+            onClick={() => setSelectedType("ENTER")}
+          >
+            ENTER
+          </button>
         </div>
       </div>
 
@@ -108,7 +138,6 @@ export default function AttendanceTable({ data }: { data: Attendance[] }) {
               </tr>
             ) : (
               filteredData.map((item, i) => {
-                console.log(item);
                 const type = getAttendanceType(item.device_id, item.time);
 
                 return (

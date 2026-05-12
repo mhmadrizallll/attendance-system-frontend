@@ -16,20 +16,31 @@ import AttendanceTable from "@/components/attendance/AttendanceTable";
 import { useAttendance } from "@/hooks/useAttendance";
 
 export default function Page() {
-  const { data, summary, fetchData } = useAttendance();
-  const [departments, setDepartments] = useState<any[]>([]);
+  const { data, fetchData } = useAttendance();
 
-  // 🔥 FILTER STATE
+  // =====================
+  // FILTER STATE
+  // =====================
   const [filters, setFilters] = useState({
     date: "",
     dept: "",
     device_id: "",
   });
 
-  // 🔥 DEVICES
-  const [devices, setDevices] = useState<any[]>([]);
+  // =====================
+  // TYPE FILTER
+  // =====================
+  const [selectedType, setSelectedType] = useState("ALL");
 
-  // 🔥 HANDLE FILTER
+  // =====================
+  // MASTER DATA
+  // =====================
+  const [devices, setDevices] = useState<any[]>([]);
+  const [departments, setDepartments] = useState<any[]>([]);
+
+  // =====================
+  // HANDLE FILTER
+  // =====================
   const handleChange = (newFilter: any) => {
     const updated = {
       ...filters,
@@ -41,7 +52,9 @@ export default function Page() {
     fetchData(updated);
   };
 
-  // 🔥 SEND IT REPORT
+  // =====================
+  // SEND IT REPORT
+  // =====================
   const handleSendEmail = async () => {
     try {
       if (!filters.date) {
@@ -49,19 +62,19 @@ export default function Page() {
         return;
       }
 
-      console.log("SEND IT REPORT:", filters.date);
-
       await sendItReport(filters.date);
 
       alert("IT Report berhasil dikirim");
     } catch (err) {
-      console.error("ERROR SEND REPORT:", err);
+      console.error(err);
 
       alert("Gagal kirim IT Report");
     }
   };
 
-  // 🔥 SEND SERVER REPORT
+  // =====================
+  // SEND SERVER REPORT
+  // =====================
   const handleSendEmailServer = async () => {
     try {
       if (!filters.date) {
@@ -69,19 +82,19 @@ export default function Page() {
         return;
       }
 
-      console.log("SEND SERVER REPORT:", filters.date);
-
       await sendItReportServer(filters.date);
 
       alert("IT Report Server berhasil dikirim");
     } catch (err) {
-      console.error("ERROR SEND SERVER REPORT:", err);
+      console.error(err);
 
       alert("Gagal kirim IT Report Server");
     }
   };
 
-  // 🔥 FETCH DEVICES
+  // =====================
+  // FETCH DEVICES
+  // =====================
   useEffect(() => {
     const fetchDevices = async () => {
       try {
@@ -89,13 +102,16 @@ export default function Page() {
 
         setDevices(res.data || []);
       } catch (err) {
-        console.error("Gagal fetch devices:", err);
+        console.error(err);
       }
     };
 
     fetchDevices();
   }, []);
 
+  // =====================
+  // FETCH DEPARTMENTS
+  // =====================
   useEffect(() => {
     const fetchDepartments = async () => {
       try {
@@ -134,10 +150,14 @@ export default function Page() {
       </div>
 
       {/* SUMMARY */}
-      <SummaryCards summary={summary} />
+      <SummaryCards data={data} selectedType={selectedType} />
 
       {/* TABLE */}
-      <AttendanceTable data={data} />
+      <AttendanceTable
+        data={data}
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+      />
     </div>
   );
 }

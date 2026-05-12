@@ -1,0 +1,348 @@
+/* =========================
+   PAGE
+========================= */
+.devices-page {
+  padding: 24px;
+}
+
+/* =========================
+   HEADER
+========================= */
+.devices-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 24px;
+}
+
+.devices-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.devices-header p {
+  color: #6b7280;
+
+  margin-top: 4px;
+}
+
+.header-actions {
+  display: flex;
+
+  gap: 12px;
+}
+
+/* =========================
+   BUTTON
+========================= */
+.refresh-btn,
+.add-device-btn {
+  border: none;
+
+  padding: 11px 18px;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  transition: all 0.2s ease;
+}
+
+.refresh-btn {
+  background: #2563eb;
+
+  color: white;
+}
+
+.add-device-btn {
+  background: #16a34a;
+
+  color: white;
+}
+
+.refresh-btn:hover,
+.add-device-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* =========================
+   GRID
+========================= */
+.device-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+  gap: 20px;
+}
+
+/* =========================
+   CARD
+========================= */
+.device-card {
+  background: white;
+
+  border-radius: 24px;
+
+  padding: 22px;
+
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+
+  transition: all 0.25s ease;
+}
+
+.device-card:hover {
+  transform: translateY(-3px);
+}
+
+/* STATUS */
+.device-status {
+  padding: 6px 12px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.online {
+  background: #dcfce7;
+
+  color: #16a34a;
+}
+
+.offline {
+  background: #fee2e2;
+
+  color: #dc2626;
+}
+
+.device-card h2 {
+  margin-top: 14px;
+
+  margin-bottom: 18px;
+}
+
+/* INFO */
+.device-info {
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-item span {
+  font-size: 12px;
+
+  color: #6b7280;
+}
+
+.info-item strong {
+  font-size: 14px;
+
+  color: #111827;
+}
+
+/* ACTION */
+.device-actions {
+  display: flex;
+
+  gap: 12px;
+
+  margin-top: 20px;
+}
+
+.edit-btn-device,
+.delete-btn-device {
+  flex: 1;
+
+  border: none;
+
+  height: 42px;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  font-weight: 600;
+
+  transition: all 0.2s ease;
+}
+
+.edit-btn-device {
+  background: #dbeafe;
+
+  color: #2563eb;
+}
+
+.delete-btn-device {
+  background: #fee2e2;
+
+  color: #dc2626;
+}
+
+.edit-btn:hover,
+.delete-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* =========================
+   MODAL
+========================= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.4);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 100;
+}
+
+.modal-box {
+  width: 420px;
+
+  background: white;
+
+  border-radius: 24px;
+
+  padding: 24px;
+}
+
+.modal-box h2 {
+  margin-bottom: 20px;
+}
+
+/* FORM */
+.form-group {
+  display: flex;
+  flex-direction: column;
+
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  height: 46px;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 12px;
+
+  padding: 0 14px;
+}
+
+/* ACTIONS */
+.modal-actions {
+  display: flex;
+
+  gap: 12px;
+
+  margin-top: 20px;
+}
+
+.cancel-btn,
+.save-btn {
+  flex: 1;
+
+  height: 44px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  font-weight: 600;
+}
+
+.cancel-btn {
+  background: #f3f4f6;
+}
+
+.save-btn {
+  background: #2563eb;
+
+  color: white;
+}
+
+/* =========================
+   LOADING
+========================= */
+.device-wrapper {
+  position: relative;
+}
+
+.device-overlay {
+  position: absolute;
+  inset: 0;
+
+  background: rgba(255, 255, 255, 0.55);
+
+  backdrop-filter: blur(2px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 20;
+
+  border-radius: 24px;
+}
+
+.device-spinner {
+  width: 36px;
+  height: 36px;
+
+  border: 3px solid #dbeafe;
+  border-top: 3px solid #2563eb;
+
+  border-radius: 999px;
+
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.device-forbidden,
+.device-error {
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.device-forbidden {
+  background: #fff4f4;
+  color: #d11a2a;
+  border: 1px solid #ffc9c9;
+}
+
+.device-error {
+  background: #fff8e6;
+  color: #9a6700;
+  border: 1px solid #ffe58f;
+}

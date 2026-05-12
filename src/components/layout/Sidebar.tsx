@@ -1,34 +1,64 @@
 "use client";
 
 import Link from "next/link";
+
 import { usePathname } from "next/navigation";
+
 import { LayoutDashboard, Users, Cpu } from "lucide-react";
+
+import { isAdmin } from "@/utils/auth";
 
 export default function Sidebar() {
   const pathname = usePathname();
 
+  // =========================
+  // CHECK ROLE
+  // =========================
+  const allowedDevice = isAdmin();
+
+  // =========================
+  // MENUS
+  // =========================
   const menus = [
     {
       name: "Attendance",
       href: "/dashboard/attendance",
       icon: LayoutDashboard,
     },
-    { name: "Users", href: "/dashboard/users", icon: Users },
-    { name: "Devices", href: "/dashboard/devices", icon: Cpu },
+
+    {
+      name: "Users",
+      href: "/dashboard/users",
+      icon: Users,
+    },
+
+    // =========================
+    // ADMIN ONLY
+    // =========================
+    ...(allowedDevice
+      ? [
+          {
+            name: "Devices",
+            href: "/dashboard/devices",
+            icon: Cpu,
+          },
+        ]
+      : []),
   ];
 
   return (
     <aside className="sidebar">
       <div>
-        {/* Logo */}
+        {/* LOGO */}
         <div className="logo">
           ⚡ <span>Admin Panel</span>
         </div>
 
-        {/* Menu */}
+        {/* MENU */}
         <nav className="menu">
           {menus.map((item, i) => {
             const isActive = pathname === item.href;
+
             const Icon = item.icon;
 
             return (
@@ -38,6 +68,7 @@ export default function Sidebar() {
                 className={`menu-item ${isActive ? "active" : ""}`}
               >
                 <Icon size={18} />
+
                 <span>{item.name}</span>
               </Link>
             );
@@ -45,7 +76,7 @@ export default function Sidebar() {
         </nav>
       </div>
 
-      {/* Footer */}
+      {/* FOOTER */}
       <div className="sidebar-footer">
         <p>v1.0</p>
       </div>

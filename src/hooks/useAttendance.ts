@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+
 import { socket } from "../../lib/socket";
-import { getAttendance } from "../services/attendanceService";
+
+import { getAttendance, getSummary } from "../services/attendanceService";
 
 export type Attendance = {
   device_id: number;
@@ -12,26 +14,52 @@ export type Attendance = {
   time: string;
 };
 
+type Filters = {
+  date?: string;
+  dept?: string;
+  device_id?: string;
+};
+
 export function useAttendance() {
+  // =====================
+  // TABLE DATA
+  // =====================
   const [data, setData] = useState<Attendance[]>([]);
 
+  // =====================
+  // SUMMARY
+  // =====================
   const [summary, setSummary] = useState({
     totalAttendance: 0,
     uniqueUsers: 0,
     activeDevices: 0,
   });
 
-  const fetchData = async (filters: {
-    date?: string;
-    dept?: string;
-    device_id?: string;
-  }) => {
+  // =====================
+  // FETCH DATA
+  // =====================
+  const fetchData = async (filters: Filters) => {
     try {
-      const res = await getAttendance(filters);
+      console.log("FETCH FILTERS:", filters);
 
-      setData(res.data || []);
+      // =====================
+      // FETCH TABLE
+      // =====================
+      const attendanceRes = await getAttendance(filters);
+
+      console.log("ATTENDANCE RES:", attendanceRes);
+
+      setData(attendanceRes.data || []);
+
+      // =====================
+      // FETCH SUMMARY
+      // =====================
+      const summaryRes = await getSummary(filters);
+
+      console.log("SUMMARY RES:", summaryRes);
+
       setSummary(
-        res.summary || {
+        summaryRes.data || {
           totalAttendance: 0,
           uniqueUsers: 0,
           activeDevices: 0,
@@ -42,6 +70,9 @@ export function useAttendance() {
     }
   };
 
+  // =====================
+  // SOCKET REALTIME
+  // =====================
   useEffect(() => {
     socket.connect();
 

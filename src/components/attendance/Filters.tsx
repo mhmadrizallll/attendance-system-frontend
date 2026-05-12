@@ -1,6 +1,7 @@
 "use client";
 
 import DatePicker from "react-datepicker";
+
 import "react-datepicker/dist/react-datepicker.css";
 import "./css/filter.css";
 
@@ -31,11 +32,21 @@ export default function Filters({
           <label>Tanggal</label>
 
           <DatePicker
-            selected={date ? new Date(date) : null}
-            onChange={(date: Date | null) => {
-              if (!date) return;
+            selected={date ? new Date(date + "T00:00:00") : null}
+            onChange={(selectedDate: Date | null) => {
+              if (!selectedDate) return;
 
-              const formatted = date.toISOString().split("T")[0];
+              // ✅ FORMAT LOCAL DATE (ANTI MUNDUR 1 HARI)
+              const year = selectedDate.getFullYear();
+
+              const month = String(selectedDate.getMonth() + 1).padStart(
+                2,
+                "0",
+              );
+
+              const day = String(selectedDate.getDate()).padStart(2, "0");
+
+              const formatted = `${year}-${month}-${day}`;
 
               onChange({
                 date: formatted,
@@ -54,15 +65,26 @@ export default function Filters({
           <select
             value={dept}
             disabled={!date}
-            onChange={(e) => onChange({ dept: e.target.value })}
+            onChange={(e) =>
+              onChange({
+                dept: e.target.value,
+              })
+            }
           >
             <option value="">All Dept</option>
 
-            {departments.map((d) => (
-              <option key={d.department} value={d.department}>
-                {d.department}
-              </option>
-            ))}
+            {[...departments]
+              // FILTER NULL / EMPTY
+              .filter((d) => d?.department && d.department.trim() !== "")
+              // SORT A-Z
+              .sort((a, b) =>
+                (a.department || "").localeCompare(b.department || ""),
+              )
+              .map((d) => (
+                <option key={d.department} value={d.department}>
+                  {d.department}
+                </option>
+              ))}
           </select>
         </div>
 
@@ -73,15 +95,24 @@ export default function Filters({
           <select
             value={device_id}
             disabled={!date}
-            onChange={(e) => onChange({ device_id: e.target.value })}
+            onChange={(e) =>
+              onChange({
+                device_id: e.target.value,
+              })
+            }
           >
             <option value="">All Device</option>
 
-            {devices.map((d) => (
-              <option key={d.id} value={d.id}>
-                {d.name}
-              </option>
-            ))}
+            {[...devices]
+              // FILTER NULL
+              .filter((d) => d?.name)
+              // SORT A-Z
+              .sort((a, b) => (a.name || "").localeCompare(b.name || ""))
+              .map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.name}
+                </option>
+              ))}
           </select>
         </div>
       </div>
