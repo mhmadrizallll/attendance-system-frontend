@@ -15,6 +15,12 @@ import AttendanceTable from "@/components/attendance/AttendanceTable";
 
 import { useAttendance } from "@/hooks/useAttendance";
 
+// CONTOH
+const user =
+  typeof window !== "undefined"
+    ? JSON.parse(localStorage.getItem("user") || "{}")
+    : {};
+
 export default function Page() {
   const { data, fetchData } = useAttendance();
 
@@ -139,15 +145,17 @@ export default function Page() {
       />
 
       {/* ACTION BUTTON */}
-      <div className="action-bar">
-        <button onClick={handleSendEmail} className="send-btn">
-          Send IT Report
-        </button>
+      {user?.role === "superadmin" && (
+        <div className="action-bar">
+          <button onClick={handleSendEmail} className="send-btn">
+            Send IT Report
+          </button>
 
-        <button onClick={handleSendEmailServer} className="send-btn">
-          Send IT Report Server
-        </button>
-      </div>
+          <button onClick={handleSendEmailServer} className="send-btn">
+            Send IT Report Server
+          </button>
+        </div>
+      )}
 
       {/* SUMMARY */}
       <SummaryCards data={data} selectedType={selectedType} />

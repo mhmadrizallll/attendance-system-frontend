@@ -8,6 +8,8 @@ import { LayoutDashboard, Users, Cpu } from "lucide-react";
 
 import { isAdmin } from "@/utils/auth";
 
+import "@/app/globals.css";
+
 export default function Sidebar() {
   const pathname = usePathname();
 
