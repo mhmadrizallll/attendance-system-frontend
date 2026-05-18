@@ -3,11 +3,29 @@
 "use client";
 
 type Props = {
-  user: any;
+  user?: any;
   onClose: () => void;
 };
 
 export default function UserDetailModal({ user, onClose }: Props) {
+  const formatDate = (date?: string | null) => {
+    if (!date) return "-";
+
+    return new Date(date).toLocaleDateString("id-ID", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  const formatDateTime = (date?: string | null) => {
+    if (!date) return "-";
+
+    return new Date(date).toLocaleString("id-ID");
+  };
+
+  if (!user) return null;
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div
@@ -16,7 +34,11 @@ export default function UserDetailModal({ user, onClose }: Props) {
       >
         {/* HEADER */}
         <div className="detail-header">
-          <h2>User Detail</h2>
+          <div>
+            <h2>User Detail</h2>
+
+            <p className="detail-subtitle">Detail informasi user attendance</p>
+          </div>
 
           <button className="close-btn" onClick={onClose}>
             ✕
@@ -27,56 +49,58 @@ export default function UserDetailModal({ user, onClose }: Props) {
         <div className="detail-grid">
           <div className="detail-item">
             <label>ID</label>
-            <span>-</span>
+            <span>{user?.id ?? "-"}</span>
           </div>
 
           <div className="detail-item">
             <label>NIK</label>
-            <span>{user.device_user_id}</span>
+            <span>{user?.device_user_id ?? "-"}</span>
           </div>
 
           <div className="detail-item">
             <label>Name</label>
-            <span>{user.name}</span>
+            <span>{user?.name ?? "-"}</span>
           </div>
 
           <div className="detail-item">
             <label>Department</label>
-            <span>{user.department || "-"}</span>
+            <span>{user?.department ?? "-"}</span>
+          </div>
+
+          <div className="detail-item">
+            <label>Employment Status</label>
+            <span>{user?.status ?? "-"}</span>
+          </div>
+
+          <div className="detail-item">
+            <label>Start Date</label>
+            <span>{formatDate(user?.start_date)}</span>
           </div>
 
           <div className="detail-item">
             <label>Card Number</label>
-            <span>{user.card_number || "-"}</span>
+            <span>{user?.card_number ?? "-"}</span>
           </div>
 
-          <div className="detail-item">
+          {/* <div className="detail-item">
             <label>Created At</label>
 
-            <span>
-              {user.created_at
-                ? new Date(user.created_at).toLocaleString()
-                : "-"}
-            </span>
+            <span>{formatDateTime(user?.created_at)}</span>
           </div>
 
           <div className="detail-item">
             <label>Updated At</label>
 
-            <span>
-              {user.updated_at
-                ? new Date(user.updated_at).toLocaleString()
-                : "-"}
-            </span>
-          </div>
+            <span>{formatDateTime(user?.updated_at)}</span>
+          </div> */}
 
           <div className="detail-item">
             <label>Status</label>
 
             <span
-              className={user.deleted_at ? "status-deleted" : "status-active"}
+              className={user?.deleted_at ? "status-deleted" : "status-active"}
             >
-              {user.deleted_at ? "Deleted" : "Active"}
+              {user?.deleted_at ? "Deleted" : "Active"}
             </span>
           </div>
         </div>

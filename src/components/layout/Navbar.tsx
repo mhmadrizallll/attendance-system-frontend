@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, ChevronDown, LogOut, Settings, User } from "lucide-react";
+import { ChevronDown, LogOut, Settings, User } from "lucide-react";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -8,14 +8,25 @@ import { useRouter } from "next/navigation";
 
 import "./css/navbar.css";
 
-import { logout } from "@/utils/auth";
+import { logout, getUser } from "@/utils/auth";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
+  const [user, setUser] = useState<any>(null);
+
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
+
+  // =========================
+  // GET USER
+  // =========================
+  useEffect(() => {
+    const currentUser = getUser();
+
+    setUser(currentUser);
+  }, []);
 
   // =========================
   // CLOSE DROPDOWN
@@ -67,15 +78,15 @@ export default function Navbar() {
             onClick={() => setOpen(!open)}
           >
             <img
-              src="https://i.pravatar.cc/100"
+              src={`https://ui-avatars.com/api/?name=${user?.username || "User"}&background=2563eb&color=fff`}
               alt="avatar"
               className="avatar"
             />
 
             <div className="profile-text">
-              <span className="profile-name">Super Admin</span>
+              <span className="profile-name">{user?.username || "User"}</span>
 
-              <span className="profile-role">Administrator</span>
+              <span className="profile-role">{user?.role || "-"}</span>
             </div>
 
             <ChevronDown

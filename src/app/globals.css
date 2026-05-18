@@ -1348,3 +1348,29 @@ body {
   font-size: 12px;
   font-weight: 700;
 }
+
+.users-action {
+  display: flex;
+
+  justify-content: flex-end;
+
+  margin: 16px 0;
+}
+
+.probation-btn {
+  border: none;
+
+  padding: 10px 16px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-weight: 600;
+
+  transition: 0.2s;
+}
+
+.probation-btn:hover {
+  opacity: 0.9;
+}

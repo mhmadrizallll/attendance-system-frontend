@@ -1,0 +1,241 @@
+/* =========================
+   MODAL
+========================= */
+
+.probation-modal {
+  width: 95%;
+
+  max-width: 1000px;
+
+  max-height: 90vh;
+
+  overflow: hidden;
+
+  display: flex;
+
+  flex-direction: column;
+
+  border-radius: 16px;
+
+  background: #fff;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.detail-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+
+  gap: 16px;
+
+  padding: 20px 24px;
+
+  border-bottom: 1px solid #eee;
+}
+
+.detail-header h2 {
+  margin: 0;
+
+  font-size: 22px;
+
+  font-weight: 700;
+}
+
+.detail-subtitle {
+  margin-top: 6px;
+
+  color: #777;
+
+  font-size: 14px;
+}
+
+.close-btn {
+  border: none;
+
+  background: transparent;
+
+  font-size: 22px;
+
+  cursor: pointer;
+
+  width: 36px;
+
+  height: 36px;
+
+  border-radius: 8px;
+
+  transition: 0.2s;
+}
+
+.close-btn:hover {
+  background: #f2f2f2;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrapper {
+  overflow: auto;
+
+  padding: 20px 24px;
+
+  flex: 1;
+}
+
+.probation-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  min-width: 700px;
+}
+
+.probation-table thead {
+  position: sticky;
+
+  top: 0;
+
+  background: #fafafa;
+
+  z-index: 10;
+}
+
+.probation-table th {
+  text-align: left;
+
+  padding: 14px 16px;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  border-bottom: 1px solid #e5e5e5;
+
+  color: #555;
+}
+
+.probation-table td {
+  padding: 14px 16px;
+
+  border-bottom: 1px solid #f1f1f1;
+
+  font-size: 14px;
+
+  vertical-align: middle;
+}
+
+.probation-table tbody tr {
+  transition: 0.2s;
+}
+
+.probation-table tbody tr:hover {
+  background: #fafafa;
+}
+
+/* =========================
+   STATUS BADGE
+========================= */
+
+.probation-table td:nth-child(4) {
+  font-weight: 600;
+
+  color: #d97706;
+}
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.empty-state {
+  padding: 60px 20px;
+
+  text-align: center;
+
+  color: #777;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.probation-footer {
+  display: flex;
+
+  justify-content: flex-end;
+
+  padding: 20px 24px;
+
+  border-top: 1px solid #eee;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.send-reminder-btn {
+  border: none;
+
+  padding: 12px 18px;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  transition: 0.2s;
+}
+
+.send-reminder-btn:hover {
+  opacity: 0.9;
+
+  transform: translateY(-1px);
+}
+
+.send-reminder-btn:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+  .probation-modal {
+    width: 100%;
+
+    height: 100vh;
+
+    max-height: 100vh;
+
+    border-radius: 0;
+  }
+
+  .detail-header {
+    padding: 16px;
+  }
+
+  .table-wrapper {
+    padding: 16px;
+  }
+
+  .probation-footer {
+    padding: 16px;
+  }
+
+  .probation-table {
+    min-width: 600px;
+  }
+}
