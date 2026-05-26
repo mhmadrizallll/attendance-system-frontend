@@ -36,7 +36,7 @@ export async function deleteUser(id: number) {
 // RESTORE USER
 // =========================
 export async function restoreUser(id: number) {
-  return apiFetch(`${BASE_URL}/${id}/restore`, {
+  return apiFetch(`${BASE_URL}/restore/${id}`, {
     method: "PATCH",
   });
 }

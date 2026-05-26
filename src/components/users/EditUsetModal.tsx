@@ -1,5 +1,3 @@
-// src/components/users/EditUserModal.tsx
-
 "use client";
 
 import { useState } from "react";
@@ -12,12 +10,13 @@ type Props = {
 
 export default function EditUserModal({ user, onClose, onSave }: Props) {
   const [form, setForm] = useState({
+    device_user_id: user.device_user_id || "",
     name: user.name || "",
     department: user.department || "",
     card_number: user.card_number || "",
   });
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
@@ -33,7 +32,7 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
         <div className="form-group">
           <label>NIK</label>
 
-          <input value={user.device_user_id} disabled />
+          <input name="device_user_id" value={form.device_user_id} disabled />
         </div>
 
         {/* NAME */}

@@ -154,7 +154,9 @@ export default function UserTable({ data, refresh }: Props) {
 
       const data = await res.json();
 
-      setLogs(data?.attendances || []);
+      console.log("LOG RESPONSE:", data);
+
+      setLogs(data?.attendances || data?.data?.attendances || []);
     } catch (err) {
       console.error(err);
 
