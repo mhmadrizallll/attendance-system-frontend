@@ -74,11 +74,14 @@ export async function getDevices() {
 // =====================
 // IT REPORT
 // =====================
-export async function sendItReport(date: string) {
+export async function sendItReport(start_date: string, end_date: string) {
   const token = localStorage.getItem("token");
 
   const res = await axios.get(`${BASE_URL}/send-it-report`, {
-    params: { date },
+    params: {
+      start_date,
+      end_date,
+    },
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -90,11 +93,14 @@ export async function sendItReport(date: string) {
 // =====================
 // SERVER REPORT
 // =====================
-export async function sendItReportServer(date: string) {
+export async function sendItReportServer(start_date: string, end_date: string) {
   const token = localStorage.getItem("token");
 
   const res = await axios.get(`${BASE_URL}/send-it-report-server`, {
-    params: { date },
+    params: {
+      start_date,
+      end_date,
+    },
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -116,4 +122,26 @@ export async function getDepartments() {
   });
 
   return res.json();
+}
+
+// =====================
+// EXPORT ATTENDANCE
+// =====================
+export async function exportAttendance(filters: {
+  type?: string;
+  start_date?: string;
+  end_date?: string;
+  dept?: string;
+}) {
+  const token = localStorage.getItem("token");
+
+  const res = await axios.get(`${BASE_URL}/attendances/export`, {
+    params: filters,
+    responseType: "blob",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
 }

@@ -6,7 +6,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./css/filter.css";
 
 type Props = {
-  date: string;
+  start_date: string;
+  end_date: string;
   dept: string;
   device_id: string;
   devices: any[];
@@ -15,7 +16,8 @@ type Props = {
 };
 
 export default function Filters({
-  date,
+  start_date,
+  end_date,
   dept,
   device_id,
   devices,
@@ -28,15 +30,15 @@ export default function Filters({
 
       <div className="filter-grid">
         {/* DATE */}
+        {/* START DATE */}
         <div className="filter-group">
-          <label>Tanggal</label>
+          <label>Start Date</label>
 
           <DatePicker
-            selected={date ? new Date(date + "T00:00:00") : null}
+            selected={start_date ? new Date(start_date + "T00:00:00") : null}
             onChange={(selectedDate: Date | null) => {
               if (!selectedDate) return;
 
-              // ✅ FORMAT LOCAL DATE (ANTI MUNDUR 1 HARI)
               const year = selectedDate.getFullYear();
 
               const month = String(selectedDate.getMonth() + 1).padStart(
@@ -46,14 +48,40 @@ export default function Filters({
 
               const day = String(selectedDate.getDate()).padStart(2, "0");
 
-              const formatted = `${year}-${month}-${day}`;
-
               onChange({
-                date: formatted,
+                start_date: `${year}-${month}-${day}`,
               });
             }}
             dateFormat="dd MMMM yyyy"
-            placeholderText="Select date"
+            placeholderText="Start Date"
+            className="modern-date-input"
+          />
+        </div>
+
+        {/* END DATE */}
+        <div className="filter-group">
+          <label>End Date</label>
+
+          <DatePicker
+            selected={end_date ? new Date(end_date + "T00:00:00") : null}
+            onChange={(selectedDate: Date | null) => {
+              if (!selectedDate) return;
+
+              const year = selectedDate.getFullYear();
+
+              const month = String(selectedDate.getMonth() + 1).padStart(
+                2,
+                "0",
+              );
+
+              const day = String(selectedDate.getDate()).padStart(2, "0");
+
+              onChange({
+                end_date: `${year}-${month}-${day}`,
+              });
+            }}
+            dateFormat="dd MMMM yyyy"
+            placeholderText="End Date"
             className="modern-date-input"
           />
         </div>
@@ -64,7 +92,7 @@ export default function Filters({
 
           <select
             value={dept}
-            disabled={!date}
+            disabled={!start_date || !end_date}
             onChange={(e) =>
               onChange({
                 dept: e.target.value,
@@ -94,7 +122,7 @@ export default function Filters({
 
           <select
             value={device_id}
-            disabled={!date}
+            disabled={!start_date || !end_date}
             onChange={(e) =>
               onChange({
                 device_id: e.target.value,
@@ -117,8 +145,8 @@ export default function Filters({
         </div>
       </div>
 
-      {!date && (
-        <p className="filter-warning">Select Date first to filter data</p>
+      {(!start_date || !end_date) && (
+        <p className="filter-warning">Select Start Date and End Date first</p>
       )}
     </div>
   );

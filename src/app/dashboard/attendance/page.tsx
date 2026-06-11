@@ -7,6 +7,7 @@ import {
   sendItReport,
   sendItReportServer,
   getDepartments,
+  exportAttendance,
 } from "@/services/attendanceService";
 
 import Filters from "@/components/attendance/Filters";
@@ -28,7 +29,8 @@ export default function Page() {
   // FILTER STATE
   // =====================
   const [filters, setFilters] = useState({
-    date: "",
+    start_date: "",
+    end_date: "",
     dept: "",
     device_id: "",
   });
@@ -55,7 +57,9 @@ export default function Page() {
 
     setFilters(updated);
 
-    fetchData(updated);
+    if (updated.start_date && updated.end_date) {
+      fetchData(updated);
+    }
   };
 
   // =====================
@@ -63,18 +67,47 @@ export default function Page() {
   // =====================
   const handleSendEmail = async () => {
     try {
-      if (!filters.date) {
-        alert("Pilih tanggal dulu");
+      if (!filters.start_date || !filters.end_date) {
+        alert("Pilih range tanggal dulu");
         return;
       }
 
-      await sendItReport(filters.date);
+      await sendItReport(filters.start_date, filters.end_date);
 
       alert("IT Report berhasil dikirim");
     } catch (err) {
       console.error(err);
-
       alert("Gagal kirim IT Report");
+    }
+  };
+
+  const handleExportAttendance = async () => {
+    try {
+      const blob = await exportAttendance({
+        type: filters.start_date && filters.end_date ? "range" : "today",
+        start_date: filters.start_date,
+        end_date: filters.end_date,
+        dept: filters.dept,
+      });
+
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+
+      a.href = url;
+
+      a.download = `attendance-${new Date().toISOString().slice(0, 10)}.txt`;
+
+      document.body.appendChild(a);
+
+      a.click();
+
+      a.remove();
+
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);
+      alert("Gagal export attendance");
     }
   };
 
@@ -83,17 +116,16 @@ export default function Page() {
   // =====================
   const handleSendEmailServer = async () => {
     try {
-      if (!filters.date) {
-        alert("Pilih tanggal dulu");
+      if (!filters.start_date || !filters.end_date) {
+        alert("Pilih range tanggal dulu");
         return;
       }
 
-      await sendItReportServer(filters.date);
+      await sendItReportServer(filters.start_date, filters.end_date);
 
       alert("IT Report Server berhasil dikirim");
     } catch (err) {
       console.error(err);
-
       alert("Gagal kirim IT Report Server");
     }
   };
@@ -136,7 +168,8 @@ export default function Page() {
     <div>
       {/* FILTER */}
       <Filters
-        date={filters.date}
+        start_date={filters.start_date}
+        end_date={filters.end_date}
         dept={filters.dept}
         device_id={filters.device_id}
         devices={devices}
@@ -145,17 +178,23 @@ export default function Page() {
       />
 
       {/* ACTION BUTTON */}
-      {user?.role === "superadmin" && (
-        <div className="action-bar">
-          <button onClick={handleSendEmail} className="send-btn">
-            Send IT Report
-          </button>
+      <div className="action-bar">
+        <button onClick={handleExportAttendance} className="send-btn">
+          Export Attendance
+        </button>
 
-          <button onClick={handleSendEmailServer} className="send-btn">
-            Send IT Report Server
-          </button>
-        </div>
-      )}
+        {user?.role === "superadmin" && (
+          <>
+            <button onClick={handleSendEmail} className="send-btn">
+              Send IT Report
+            </button>
+
+            <button onClick={handleSendEmailServer} className="send-btn">
+              Send IT Report Server
+            </button>
+          </>
+        )}
+      </div>
 
       {/* SUMMARY */}
       <SummaryCards data={data} selectedType={selectedType} />
