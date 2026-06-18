@@ -23,16 +23,21 @@ const toMinutes = (time: string) => {
 const getType = (item: Attendance) => {
   const minutes = toMinutes(item.time);
 
-  // ENTER (MESIN SERVER)
   if (Number(item.device_id) === 3) {
     return "ENTER";
   }
 
-  // IN
-  if (minutes >= 435 && minutes < 900) return "IN";
+  if (Number(item.device_id) === 5) {
+    return "ACCESS";
+  }
 
-  // OUT
-  if (minutes >= 900) return "OUT";
+  if (minutes >= 435 && minutes < 900) {
+    return "IN";
+  }
+
+  if (minutes >= 900) {
+    return "OUT";
+  }
 
   return null;
 };
@@ -59,6 +64,7 @@ export default function AttendanceTable({
         in?: Attendance;
         out?: Attendance;
         enter?: Attendance[];
+        access?: Attendance[];
       }
     >();
 
@@ -75,6 +81,7 @@ export default function AttendanceTable({
           department: item.department,
           date: item.date,
           enter: [],
+          access: [],
         });
       }
 
@@ -85,6 +92,10 @@ export default function AttendanceTable({
       // =====================
       if (type === "ENTER") {
         user.enter!.push(item);
+      }
+
+      if (type === "ACCESS") {
+        user.access!.push(item);
       }
 
       // =====================
@@ -112,6 +123,25 @@ export default function AttendanceTable({
     const result: any[] = [];
 
     map.forEach((v) => {
+      const accessLogs =
+        v.access?.sort((a, b) => toMinutes(a.time) - toMinutes(b.time)) || [];
+
+      const filteredAccess: Attendance[] = [];
+
+      for (const log of accessLogs) {
+        const last = filteredAccess[filteredAccess.length - 1];
+
+        if (!last) {
+          filteredAccess.push(log);
+          continue;
+        }
+
+        const diff = toMinutes(log.time) - toMinutes(last.time);
+
+        if (diff > 1) {
+          filteredAccess.push(log);
+        }
+      }
       // IN
       if (v.in) {
         result.push({
@@ -137,6 +167,18 @@ export default function AttendanceTable({
           device_name: v.out.device_name,
         });
       }
+
+      filteredAccess.forEach((a, index) => {
+        result.push({
+          name: v.name,
+          device_user_id: v.device_user_id,
+          department: v.department,
+          date: v.date,
+          time: a.time,
+          type: index % 2 === 0 ? "ACCESS IN" : "ACCESS OUT",
+          device_name: a.device_name,
+        });
+      });
 
       // ENTER (bisa lebih dari 1)
       v.enter!.forEach((e) => {
@@ -168,7 +210,7 @@ export default function AttendanceTable({
       {/* HEADER */}
       <div className="table-header">
         <div>
-          <h2>📊 Data Kehadiran</h2>
+          <h2>?? Data Kehadiran</h2>
           <span>{filteredData.length} Records</span>
         </div>
 
@@ -210,6 +252,28 @@ export default function AttendanceTable({
           >
             ENTER
           </button>
+
+          <button
+            className={
+              selectedType === "ACCESS IN"
+                ? "filter-btn active-in"
+                : "filter-btn"
+            }
+            onClick={() => setSelectedType("ACCESS IN")}
+          >
+            ACCESS IN
+          </button>
+
+          <button
+            className={
+              selectedType === "ACCESS OUT"
+                ? "filter-btn active-out"
+                : "filter-btn"
+            }
+            onClick={() => setSelectedType("ACCESS OUT")}
+          >
+            ACCESS OUT
+          </button>
         </div>
       </div>
 
@@ -232,7 +296,7 @@ export default function AttendanceTable({
             {filteredData.length === 0 ? (
               <tr>
                 <td colSpan={7} className="empty">
-                  Tidak ada data 😴
+                  Tidak ada data ??
                 </td>
               </tr>
             ) : (
