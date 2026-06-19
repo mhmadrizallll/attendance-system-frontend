@@ -169,14 +169,33 @@ export default function UserTable({ data, refresh }: Props) {
   // =========================
   // LOG TYPE
   // =========================
-  const getLogType = (deviceName: string = "", time: string) => {
-    const hour = Number(time.split(":")[0]);
+  const getLogType = (log: any, index: number, logs: any[]) => {
+    const hour = Number(new Date(log.timestamp).toTimeString().split(":")[0]);
 
-    const normalized = deviceName.toLowerCase().trim();
+    const deviceId = Number(log.device_id);
 
-    if (normalized.includes("mesin server")) return "ENTER";
+    // Mesin Server
+    if (deviceId === 3) {
+      return "ENTER";
+    }
 
-    if (hour >= 6 && hour < 15) return "IN";
+    // Mesin Gate
+    if (deviceId === 6) {
+      const gateLogs = logs
+        .filter((x) => Number(x.device_id) === 6)
+        .sort(
+          (a, b) =>
+            new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
+        );
+
+      const gateIndex = gateLogs.findIndex((x) => x.id === log.id);
+
+      return gateIndex % 2 === 0 ? "ACCESS IN" : "ACCESS OUT";
+    }
+
+    if (hour >= 7 && hour < 15) {
+      return "IN";
+    }
 
     return "OUT";
   };
@@ -184,7 +203,13 @@ export default function UserTable({ data, refresh }: Props) {
   const getLogBadgeClass = (type: string) => {
     if (type === "IN") return "badge-in";
 
+    if (type === "OUT") return "badge-out";
+
     if (type === "ENTER") return "badge-enter";
+
+    if (type === "ACCESS IN") return "badge-in";
+
+    if (type === "ACCESS OUT") return "badge-out";
 
     return "badge-out";
   };
@@ -373,14 +398,18 @@ export default function UserTable({ data, refresh }: Props) {
                       textAlign: "center",
                     }}
                   >
-                    {logs.map((log: any) => {
+                    {logs.map((log: any, index: number) => {
                       const d = new Date(log.timestamp);
 
-                      const date = d.toISOString().split("T")[0];
+                      const yyyy = d.getFullYear();
+                      const mm = String(d.getMonth() + 1).padStart(2, "0");
+                      const dd = String(d.getDate()).padStart(2, "0");
+
+                      const date = `${yyyy}-${mm}-${dd}`;
 
                       const time = d.toTimeString().split(" ")[0];
 
-                      const type = getLogType(log.device_name, time);
+                      const type = getLogType(log, index, logs);
 
                       return (
                         <tr key={log.id}>

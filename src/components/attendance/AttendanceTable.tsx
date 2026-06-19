@@ -27,7 +27,7 @@ const getType = (item: Attendance) => {
     return "ENTER";
   }
 
-  if (Number(item.device_id) === 5) {
+  if (Number(item.device_id) === 6) {
     return "ACCESS";
   }
 
